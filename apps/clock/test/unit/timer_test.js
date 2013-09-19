@@ -1,5 +1,6 @@
 requireApp('clock/js/emitter.js');
 requireApp('clock/js/utils.js');
+requireApp('clock/js/form_button.js');
 
 requireApp('clock/test/unit/mocks/mock_asyncstorage.js');
 requireApp('clock/js/timer.js');

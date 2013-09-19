@@ -79,6 +79,18 @@ Timer.Panel = function(element) {
     element.addEventListener('click', this.onclick.bind(this), false);
   }, this);
 
+  var sound = this.nodes.sound;
+  var soundMenuConfig = {
+    formatLabel: function(sound) {
+      // sound could either be string or int, so test for both
+    return (sound === 0 || sound === '0') ?
+        _('noSound') :
+        _(sound.replace('.', '_'));
+    }
+  };
+  this.soundButton = new FormButton(sound, soundMenuConfig);
+  this.soundButton.refreshButtonLabel();
+
   View.instance(element).on(
     'visibilitychange', this.onvisibilitychange.bind(this)
   );

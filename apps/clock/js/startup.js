@@ -37,7 +37,8 @@ var loadQueue = [
     'js/view.js',
     'js/alarm.js',
     'js/active_alarm.js',
-    'js/alarmsdb.js'
+    'js/alarmsdb.js',
+    'js/form_button.js'
   ],
   [
     'js/panel.js',
