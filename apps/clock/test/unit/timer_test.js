@@ -5,6 +5,7 @@ requireApp('clock/js/view.js');
 requireApp('clock/js/panel.js');
 requireApp('clock/js/tabs.js');
 requireApp('clock/js/utils.js');
+requireApp('clock/js/form_button.js');
 
 requireApp('clock/test/unit/mocks/mock_picker.js');
 requireApp('clock/test/unit/mocks/mock_asyncstorage.js');
