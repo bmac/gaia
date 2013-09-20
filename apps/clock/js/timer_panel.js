@@ -89,7 +89,7 @@ Timer.Panel = function(element) {
     }
   };
   this.soundButton = new FormButton(sound, soundMenuConfig);
-  this.soundButton.refreshButtonLabel();
+  this.soundButton.refresh();
 
   View.instance(element).on(
     'visibilitychange', this.onvisibilitychange.bind(this)

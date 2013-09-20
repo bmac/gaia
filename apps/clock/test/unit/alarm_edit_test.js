@@ -6,6 +6,7 @@ requireApp('clock/js/alarm_manager.js');
 requireApp('clock/js/alarm_edit.js');
 requireApp('clock/js/alarm_list.js');
 requireApp('clock/js/active_alarm.js');
+requireApp('clock/js/form_button.js');
 
 requireApp('clock/test/unit/mocks/mock_alarmsDB.js');
 requireApp('clock/test/unit/mocks/mock_alarm_list.js');
@@ -34,6 +35,11 @@ suite('AlarmEditView', function() {
     navigator.mozL10n = MockL10n;
 
     loadBodyHTML('/index.html');
+
+    sinon.stub(FormButton.prototype, '_createButton');
+    var button = document.createElement('button');
+    FormButton.prototype._createButton.returns(button);
+    AlarmEdit.init();
   });
 
   suiteTeardown(function() {
@@ -42,6 +48,7 @@ suite('AlarmEditView', function() {
     AlarmsDB = _AlarmsDB;
     navigator.mozL10n = nml;
     ActiveAlarm.handler.restore();
+    FormButton.prototype._createButton.restore();
   });
 
   suite('Alarm persistence', function() {
@@ -67,7 +74,9 @@ suite('AlarmEditView', function() {
       delete AlarmEdit.labelInput;
       AlarmEdit.labelInput = document.createElement('input');
       delete AlarmEdit.timeSelect;
+      delete AlarmEdit.timeButton.input;
       AlarmEdit.timeSelect = document.createElement('input');
+      AlarmEdit.timeButton.input = AlarmEdit.timeSelect;
       AlarmEdit.initTimeSelect();
 
       this.sinon.stub(AlarmEdit, 'getTimeSelect');
