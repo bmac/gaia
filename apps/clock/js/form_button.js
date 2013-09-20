@@ -45,11 +45,9 @@ function FormButton(input, config) {
   });
 
   this.button.addEventListener('click', this.focusInput.bind(this), false);
-  if (this.isSelect) {
-    input.addEventListener('change', this.refresh.bind(this), false);
-  } else {
-    input.addEventListener('blur', this.refresh.bind(this), false);
-  }
+
+  input.addEventListener('change', this.refresh.bind(this), false);
+  input.addEventListener('blur', this.refresh.bind(this), false);
 }
 
 /**
@@ -102,9 +100,12 @@ FormButton.prototype.getValue = function() {
 };
 
 /**
- * getValue Returns the current value of the input.
+ * setValue sets the current value of the input and update's the
+ * button text.
  *
- * @return {String|Object} The value of the input.
+ * @param {String|Object} value A string of the current values or an
+ * object with properties that map (via the selectOptions property) to
+ * input options if the input is a multi select.
  *
  */
 FormButton.prototype.setValue = function(value) {
