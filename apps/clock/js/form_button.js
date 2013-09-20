@@ -11,11 +11,15 @@
  * and should return a string which will be used as the textContent of
  * the button.
  *
- * `onChange` - A function which will be called with the new value of the
- * input every time it changes.
- *
  * `selectOptions` - An array of values that will be used as keynames
  * in the value object returned when the input is a select multiple list.
+ *
+ * `template` - Text that will be parsed as HTML and inserted into the
+ * document as the main button used to trigger the input. The default
+ * value creates a button element with the class 'icon' and
+ * 'icon-dialog'.
+ *
+ * `buttonId` - A string that is used as the id of the button element.
  *
  * @constructor
  * @param {HTMLElement} input The input element to trigger.
@@ -29,14 +33,22 @@ function FormButton(input, config) {
   this.input = input;
   this.button = this._createButton();
 
+  // hide input
+  this.input.style.position = 'absolute';
+  this.input.style.opacity = 0;
 
-  this._hideInput();
+  // set isSelect
+  Object.defineProperty(this, 'isSelect', {
+    configurable: false,
+    writable: false,
+    value: this.input.nodeName === 'SELECT'
+  });
 
   this.button.addEventListener('click', this.focusInput.bind(this), false);
-  if (this.isSelect()) {
-    input.addEventListener('change', this.handleSelectChange.bind(this), false);
+  if (this.isSelect) {
+    input.addEventListener('change', this.refresh.bind(this), false);
   } else {
-    input.addEventListener('blur', this.handleSelectChange.bind(this), false);
+    input.addEventListener('blur', this.refresh.bind(this), false);
   }
 }
 
@@ -53,23 +65,23 @@ FormButton.prototype.focusInput = function(event) {
 };
 
 /**
- * refreshButtonLabel Updates the label text on the button to reflect
+ * refresh Updates the label text on the button to reflect
  * the current value of the input.
  *
  */
-FormButton.prototype.refreshButtonLabel = function(value) {
-  value = (value !== undefined) ? value : this.getInputValue();
+FormButton.prototype.refresh = function() {
+  var value = this.getValue();
   this.button.textContent = this.formatLabel(value);
 };
 
 /**
- * getInputValue Returns the current value of the input.
+ * getValue Returns the current value of the input.
  *
  * @return {String|Object} The value of the input.
  *
  */
-FormButton.prototype.getInputValue = function() {
-  if (this.isSelect()) {
+FormButton.prototype.getValue = function() {
+  if (this.isSelect) {
     if (this.input.multiple) {
       var selectedOptions = {};
       var options = this.input.options;
@@ -90,59 +102,56 @@ FormButton.prototype.getInputValue = function() {
 };
 
 /**
- * getInputValue Returns the current value of the input.
+ * getValue Returns the current value of the input.
  *
  * @return {String|Object} The value of the input.
  *
  */
-FormButton.prototype.isSelect = function() {
-  return this.input.nodeName === 'SELECT';
-};
-
-/**
- * An event handler that is called when the input is changed.
- *
- * @return {String|Object} The value of the input.
- *
- */
-FormButton.prototype.handleSelectChange = function(event) {
-  this.onChange(this.getInputValue());
-  this.refreshButtonLabel();
+FormButton.prototype.setValue = function(value) {
+  if (this.isSelect) {
+    if (this.input.multiple) {
+      // multi select
+      var selectedOptions = {};
+      var options = this.input.options;
+      for (var i = 0; i < options.length; i++) {
+        options[i].selected = value[this.selectOptions[i]] === true;
+      }
+    }
+    // normal select element
+    Utils.changeSelectByValue(this.input, value);
+  } else {
+    // input element
+    this.input.value = value;
+  }
+  // Update the text on the button to reflect the new input value
+  this.refresh();
 };
 
 /**
  * An overrideable method that is called when updating the textContent
  * of the button.
  *
- * @return {String|Object} The value of the input.
+ * @return {String} The formatted text to display in the label.
  *
  */
 FormButton.prototype.formatLabel = function(value) {
   return value;
 };
 
-/**
- * An overrideable method that is called whenever the value of the
- * input changes.
- *
- * @return {String|Object} The value of the input.
- *
- */
-FormButton.prototype.onChange = function() {};
-
-FormButton.prototype._hideInput = function() {
-  this.input.style.position = 'absolute';
-  this.input.style.opacity = 0;
-};
-
 FormButton.prototype._createButton = function() {
-  // var button = this._renderButtonTemplate();
-  // this.input.parentNode.insertBefore( button, this.input );
-  this.input.insertAdjacentHTML('afterend', this.template);
-  var button = this.input.nextSibling;
+  var input = this.input;
+  input.insertAdjacentHTML('afterend', this.template);
+  var button = input.nextSibling;
+  if (this.buttonId) {
+    button.id = this.buttonId;
+  }
   return button;
 };
 
+/**
+ * template The template for the button element.
+ *
+ */
 FormButton.prototype.template = '<button class="icon icon-dialog"></button>';
 
 exports.FormButton = FormButton;
