@@ -106,7 +106,7 @@ FormButton.prototype.getValue = function() {
     if (this.input.selectedIndex !== -1) {
       return Utils.getSelectedValue(this.input);
     }
-    return '';
+    return null;
   }
   // input node
   return this.input.value;
