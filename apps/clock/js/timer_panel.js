@@ -81,6 +81,7 @@ Timer.Panel = function(element) {
 
   var sound = this.nodes.sound;
   var soundMenuConfig = {
+    buttonId: 'timer-sound-menu',
     formatLabel: function(sound) {
       // sound could either be string or int, so test for both
     return (sound === 0 || sound === '0') ?
