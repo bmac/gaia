@@ -92,8 +92,7 @@ var AlarmEdit = {
     this.soundButton = new FormButton(this.soundSelect, {
       buttonId: 'sound-menu',
       formatLabel: function(sound) {
-        // sound could either be string or int, so test for both
-        return (sound === 0 || sound === '0') ?
+        return (sound === null || sound === '0') ?
                                _('noSound') :
                                _(sound.replace('.', '_'));
       }
@@ -102,8 +101,7 @@ var AlarmEdit = {
     this.soundSelect.addEventListener('blur', this);
     this.vibrateButton = new FormButton(this.vibrateSelect, {
       formatLabel: function(vibrate) {
-        // vibrate could be either string or int, so test for both
-        return (vibrate === 0 || vibrate === '0') ?
+        return (vibrate === null || vibrate === '0') ?
                                  _('vibrateOff') :
                                  _('vibrateOn');
       }

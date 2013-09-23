@@ -83,8 +83,7 @@ Timer.Panel = function(element) {
   var soundMenuConfig = {
     buttonId: 'timer-sound-menu',
     formatLabel: function(sound) {
-      // sound could either be string or int, so test for both
-    return (sound === 0 || sound === '0') ?
+      return (sound === null || sound === '0') ?
         _('noSound') :
         _(sound.replace('.', '_'));
     }
