@@ -36,9 +36,6 @@ suite('AlarmEditView', function() {
 
     loadBodyHTML('/index.html');
 
-    sinon.stub(FormButton.prototype, '_createButton');
-    var button = document.createElement('button');
-    FormButton.prototype._createButton.returns(button);
     AlarmEdit.init();
   });
 
@@ -48,7 +45,6 @@ suite('AlarmEditView', function() {
     AlarmsDB = _AlarmsDB;
     navigator.mozL10n = nml;
     ActiveAlarm.handler.restore();
-    FormButton.prototype._createButton.restore();
   });
 
   suite('Alarm persistence', function() {

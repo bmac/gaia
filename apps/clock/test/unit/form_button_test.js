@@ -45,11 +45,18 @@ suite('FormButton', function() {
       assert.equal(formButton.formatLabel(), 'formatted label');
     });
 
-    test('template should be overrideable', function() {
+    test('tagName should set the element type of the button', function() {
       var formButton = new FormButton(input, {
-        template: '<span></span>'
+        tagName: 'span'
       });
       assert.equal(formButton.button.nodeName, 'SPAN');
+    });
+
+    test('className should set the classes of the button', function() {
+      var formButton = new FormButton(input, {
+        className: 'foo bar'
+      });
+      assert.equal(formButton.button.className, 'foo bar');
     });
 
     test('buttonId should set the id of the button', function() {

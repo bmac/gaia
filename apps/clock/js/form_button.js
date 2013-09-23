@@ -2,11 +2,22 @@
 (function(exports) {
 'use strict';
 
+var createButton = function(formButton) {
+  var button = document.createElement(formButton.tagName);
+  button.className = formButton.className;
+  if (formButton.buttonId) {
+    button.id = formButton.buttonId;
+  }
+  var input = formButton.input;
+  input.parentNode.insertBefore(button, input.nextSibling);
+  formButton.button = button;
+};
+
 /**
- * A FormButton is a button that triggers an input. The test
+ * A FormButton is a button that triggers an input. The text
  * of the currently selected value will display on the buttons's face.
  *
- * The `config` paramater supports the following optional proterties.
+ * The `config` paramater supports the following optional properties.
  * `formatLabel` - A function that is given the current value of the input
  * and should return a string which will be used as the textContent of
  * the button.
@@ -14,10 +25,12 @@
  * `selectOptions` - An array of values that will be used as keynames
  * in the value object returned when the input is a select multiple list.
  *
- * `template` - Text that will be parsed as HTML and inserted into the
+ * `tagName` - The name of the tag to create and insert into the
  * document as the main button used to trigger the input. The default
- * value creates a button element with the class 'icon' and
- * 'icon-dialog'.
+ * value is 'button'
+ *
+ * `className` The value of the className property that will be assigned to
+ *  the button element the default value is 'icon icon-dialog'.
  *
  * `buttonId` - A string that is used as the id of the button element.
  *
@@ -31,7 +44,7 @@ function FormButton(input, config) {
   Utils.extend(this, config);
 
   this.input = input;
-  this.button = this._createButton();
+  createButton(this);
 
   // hide input
   this.input.style.position = 'absolute';
@@ -59,7 +72,7 @@ function FormButton(input, config) {
 FormButton.prototype.focusInput = function(event) {
   event.preventDefault();
   var menu = this.input;
-  setTimeout(function() { menu.focus(); }, 10);
+  setTimeout(this.input.focus.bind(this.input), 10);
 };
 
 /**
@@ -117,9 +130,10 @@ FormButton.prototype.setValue = function(value) {
       for (var i = 0; i < options.length; i++) {
         options[i].selected = value[this.selectOptions[i]] === true;
       }
+    } else {
+      // normal select element
+      Utils.changeSelectByValue(this.input, value);
     }
-    // normal select element
-    Utils.changeSelectByValue(this.input, value);
   } else {
     // input element
     this.input.value = value;
@@ -139,21 +153,23 @@ FormButton.prototype.formatLabel = function(value) {
   return value;
 };
 
-FormButton.prototype._createButton = function() {
-  var input = this.input;
-  input.insertAdjacentHTML('afterend', this.template);
-  var button = input.nextSibling;
-  if (this.buttonId) {
-    button.id = this.buttonId;
-  }
-  return button;
-};
-
 /**
  * template The template for the button element.
  *
  */
 FormButton.prototype.template = '<button class="icon icon-dialog"></button>';
+
+/**
+ * tagName The the name of the tag to insert into the document to use
+ * as the button element.
+ */
+FormButton.prototype.tagName = 'button';
+
+/**
+ * class The value to assign to the className property on the
+ * generated button element.
+ */
+FormButton.prototype.className = 'icon icon-dialog';
 
 exports.FormButton = FormButton;
 
