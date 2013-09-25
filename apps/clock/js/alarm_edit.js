@@ -114,6 +114,8 @@ var AlarmEdit = {
     });
 
     this.deleteButton.addEventListener('click', this);
+
+    this.alarmPreviewPlayer = new AlarmPreviewPlayer();
     this.init = function() {};
   },
 
@@ -212,24 +214,11 @@ var AlarmEdit = {
   },
 
   previewSound: function aev_previewSound() {
-    var ringtonePlayer = this.previewRingtonePlayer;
-    if (!ringtonePlayer) {
-      this.previewRingtonePlayer = new Audio();
-      ringtonePlayer = this.previewRingtonePlayer;
-    } else {
-      ringtonePlayer.pause();
-    }
-
-    var ringtoneName = this.getSoundSelect();
-    var previewRingtone = 'shared/resources/media/alarms/' + ringtoneName;
-    ringtonePlayer.mozAudioChannelType = 'alarm';
-    ringtonePlayer.src = previewRingtone;
-    ringtonePlayer.play();
+    this.alarmPreviewPlayer.previewSound(this.getSoundSelect());
   },
 
   stopPreviewSound: function aev_stopPreviewSound() {
-    if (this.previewRingtonePlayer)
-      this.previewRingtonePlayer.pause();
+    this.alarmPreviewPlayer.stopPreviewSound();
   },
 
   initVibrateSelect: function aev_initVibrateSelect() {

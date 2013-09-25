@@ -30,7 +30,8 @@ var loadQueue = [
     'js/picker/picker.js',
     'js/constants.js',
     'js/emitter.js',
-    'js/utils.js'
+    'js/utils.js',
+    'js/alarm_preview_player.js'
   ],
   [
     'js/tabs.js',

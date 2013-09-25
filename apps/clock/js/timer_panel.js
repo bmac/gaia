@@ -47,6 +47,8 @@ Timer.Panel = function(element) {
     }
   });
 
+  this.alarmPreviewPlayer = new AlarmPreviewPlayer();
+
   asyncStorage.getItem('active_timer', function(result) {
     if (result !== null) {
       this.timer = new Timer(JSON.parse(result));
@@ -90,6 +92,9 @@ Timer.Panel = function(element) {
   };
   this.soundButton = new FormButton(sound, soundMenuConfig);
   this.soundButton.refresh();
+
+  sound.addEventListener('change', this.previewSound.bind(this));
+  sound.addEventListener('blur', this.stopPreviewSound.bind(this));
 
   View.instance(element).on(
     'visibilitychange', this.onvisibilitychange.bind(this)
@@ -179,6 +184,15 @@ Timer.Panel.prototype.toggle = function(show, hide) {
   show.classList.remove('hide');
   hide.classList.add('hide');
   return this;
+};
+
+Timer.Panel.prototype.previewSound = function() {
+  var sound = this.soundButton.getValue();
+  this.alarmPreviewPlayer.previewSound(sound);
+};
+
+Timer.Panel.prototype.stopPreviewSound = function() {
+  this.alarmPreviewPlayer.stopPreviewSound();
 };
 
 /**
