@@ -101,6 +101,12 @@ var RingView = {
   ring: function rv_ring() {
     var ringtonePlayer = this.ringtonePlayer = new AlarmPlayer();
     ringtonePlayer.addEventListener('mozinterruptbegin', this);
+    ringtonePlayer.onInterrupt = (function() {
+        // If the incoming call happens after the alarm rings,
+        // we need to close ourselves.
+        this.stopAlarmNotification();
+        window.close();
+      }).bind(this);
     AlarmPlayer.previewSound(this.getAlarmSound());
     /* If user don't handle the onFire alarm,
        pause the ringtone after 15 minutes */
@@ -188,14 +194,6 @@ var RingView = {
       if (!document.hidden) {
         this.startAlarmNotification();
       }
-      break;
-    case 'mozinterruptbegin':
-      // Only ringer/telephony channel audio could trigger 'mozinterruptbegin'
-      // event on the 'alarm' channel audio element.
-      // If the incoming call happens after the alarm rings,
-      // we need to close ourselves.
-      this.stopAlarmNotification();
-      window.close();
       break;
     case 'click':
       var input = evt.target;
