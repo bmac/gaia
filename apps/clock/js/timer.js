@@ -138,16 +138,9 @@ Timer.prototype.cancel = function timerCancel() {
  */
 Timer.prototype.notify = function timerNotify() {
   if (this.sound) {
-    var ringtonePlayer = new Audio();
-    ringtonePlayer.mozAudioChannelType = 'alarm';
-    ringtonePlayer.loop = false;
-
-    var selectedAlarmSound = 'shared/resources/media/alarms/' +
-                             this.sound;
-    ringtonePlayer.src = selectedAlarmSound;
-    ringtonePlayer.play();
+    var alarmPlayer = new AlarmPlayer();
+    alarmPlayer.playSound(this.sound);
   }
-
 
   if (this.vibrate && navigator.vibrate) {
     navigator.vibrate([200, 200, 200, 200, 200]);

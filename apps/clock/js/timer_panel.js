@@ -47,7 +47,7 @@ Timer.Panel = function(element) {
     }
   });
 
-  this.alarmPreviewPlayer = new AlarmPreviewPlayer();
+  this.alarmPreviewPlayer = new AlarmPlayer();
 
   asyncStorage.getItem('active_timer', function(result) {
     if (result !== null) {
@@ -192,7 +192,7 @@ Timer.Panel.prototype.previewSound = function() {
 };
 
 Timer.Panel.prototype.stopPreviewSound = function() {
-  this.alarmPreviewPlayer.stopPreviewSound();
+  this.alarmPreviewPlayer.pause();
 };
 
 /**

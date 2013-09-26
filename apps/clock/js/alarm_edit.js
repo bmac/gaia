@@ -115,7 +115,7 @@ var AlarmEdit = {
 
     this.deleteButton.addEventListener('click', this);
 
-    this.alarmPreviewPlayer = new AlarmPreviewPlayer();
+    this.alarmPlayer = new AlarmPlayer();
     this.init = function() {};
   },
 
@@ -214,11 +214,11 @@ var AlarmEdit = {
   },
 
   previewSound: function aev_previewSound() {
-    this.alarmPreviewPlayer.previewSound(this.getSoundSelect());
+    this.alarmPlayer.previewSound(this.getSoundSelect());
   },
 
   stopPreviewSound: function aev_stopPreviewSound() {
-    this.alarmPreviewPlayer.stopPreviewSound();
+    this.alarmPlayer.pause();
   },
 
   initVibrateSelect: function aev_initVibrateSelect() {

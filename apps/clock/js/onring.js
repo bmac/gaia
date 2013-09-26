@@ -99,14 +99,9 @@ var RingView = {
   },
 
   ring: function rv_ring() {
-    var ringtonePlayer = this.ringtonePlayer = new Audio();
+    var ringtonePlayer = this.ringtonePlayer = new AlarmPlayer();
     ringtonePlayer.addEventListener('mozinterruptbegin', this);
-    ringtonePlayer.mozAudioChannelType = 'alarm';
-    ringtonePlayer.loop = true;
-    var selectedAlarmSound = 'shared/resources/media/alarms/' +
-                             this.getAlarmSound();
-    ringtonePlayer.src = selectedAlarmSound;
-    ringtonePlayer.play();
+    AlarmPlayer.previewSound(this.getAlarmSound());
     /* If user don't handle the onFire alarm,
        pause the ringtone after 15 minutes */
     var self = this;
