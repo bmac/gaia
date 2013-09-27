@@ -99,14 +99,10 @@ var RingView = {
   },
 
   ring: function rv_ring() {
-    var ringtonePlayer = this.ringtonePlayer = new Audio();
-    ringtonePlayer.addEventListener('mozinterruptbegin', this);
-    ringtonePlayer.mozAudioChannelType = 'alarm';
-    ringtonePlayer.loop = true;
-    var selectedAlarmSound = 'shared/resources/media/alarms/' +
-                             this.getAlarmSound();
-    ringtonePlayer.src = selectedAlarmSound;
-    ringtonePlayer.play();
+    var player = this.player = new AlarmPlayer();
+    player.on('interrupt', this.oninterrupt.bind(this));
+
+    player.playLoop(this.getAlarmSound());
     /* If user don't handle the onFire alarm,
        pause the ringtone after 15 minutes */
     var self = this;
@@ -149,8 +145,8 @@ var RingView = {
   stopAlarmNotification: function rv_stopAlarmNotification(action) {
     switch (action) {
     case 'ring':
-      if (this.ringtonePlayer) {
-        this.ringtonePlayer.pause();
+      if (this.player) {
+        this.player.pause();
       }
       break;
     case 'vibrate':
@@ -159,8 +155,8 @@ var RingView = {
       }
       break;
     default:
-      if (this.ringtonePlayer) {
-        this.ringtonePlayer.pause();
+      if (this.player) {
+        this.player.pause();
       }
       if (this.vibrateInterval) {
         window.clearInterval(this.vibrateInterval);
@@ -185,6 +181,13 @@ var RingView = {
     return this.firedAlarm.sound;
   },
 
+  oninterrupt: function() {
+    // If the incoming call happens after the alarm rings,
+    // we need to close ourselves.
+    this.stopAlarmNotification();
+    window.close();
+  },
+
   handleEvent: function rv_handleEvent(evt) {
     switch (evt.type) {
     case 'visibilitychange':
@@ -193,14 +196,6 @@ var RingView = {
       if (!document.hidden) {
         this.startAlarmNotification();
       }
-      break;
-    case 'mozinterruptbegin':
-      // Only ringer/telephony channel audio could trigger 'mozinterruptbegin'
-      // event on the 'alarm' channel audio element.
-      // If the incoming call happens after the alarm rings,
-      // we need to close ourselves.
-      this.stopAlarmNotification();
-      window.close();
       break;
     case 'click':
       var input = evt.target;
@@ -225,4 +220,3 @@ var RingView = {
 };
 
 RingView.init();
-

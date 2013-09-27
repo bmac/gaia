@@ -7,6 +7,8 @@ requireApp('clock/js/alarm_edit.js');
 requireApp('clock/js/alarm_list.js');
 requireApp('clock/js/active_alarm.js');
 requireApp('clock/js/form_button.js');
+requireApp('clock/js/emitter.js');
+requireApp('clock/js/alarm_player.js');
 
 requireApp('clock/test/unit/mocks/mock_alarmsDB.js');
 requireApp('clock/test/unit/mocks/mock_alarm_list.js');

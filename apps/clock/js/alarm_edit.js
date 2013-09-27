@@ -97,8 +97,6 @@ var AlarmEdit = {
                                _(sound.replace('.', '_'));
       }
     });
-    this.soundSelect.addEventListener('change', this);
-    this.soundSelect.addEventListener('blur', this);
     this.vibrateButton = new FormButton(this.vibrateSelect, {
       formatLabel: function(vibrate) {
         return (vibrate === null || vibrate === '0') ?
@@ -114,6 +112,7 @@ var AlarmEdit = {
     });
 
     this.deleteButton.addEventListener('click', this);
+
     this.init = function() {};
   },
 
@@ -135,16 +134,6 @@ var AlarmEdit = {
           }
           AlarmList.refreshItem(alarm);
         });
-        break;
-      case this.soundSelect:
-        switch (evt.type) {
-          case 'change':
-            this.previewSound();
-            break;
-          case 'blur':
-            this.stopPreviewSound();
-            break;
-        }
         break;
       case this.deleteButton:
         ClockView.show();
@@ -209,27 +198,6 @@ var AlarmEdit = {
 
   getSoundSelect: function aev_getSoundSelect() {
     return this.soundButton.getValue();
-  },
-
-  previewSound: function aev_previewSound() {
-    var ringtonePlayer = this.previewRingtonePlayer;
-    if (!ringtonePlayer) {
-      this.previewRingtonePlayer = new Audio();
-      ringtonePlayer = this.previewRingtonePlayer;
-    } else {
-      ringtonePlayer.pause();
-    }
-
-    var ringtoneName = this.getSoundSelect();
-    var previewRingtone = 'shared/resources/media/alarms/' + ringtoneName;
-    ringtonePlayer.mozAudioChannelType = 'alarm';
-    ringtonePlayer.src = previewRingtone;
-    ringtonePlayer.play();
-  },
-
-  stopPreviewSound: function aev_stopPreviewSound() {
-    if (this.previewRingtonePlayer)
-      this.previewRingtonePlayer.pause();
   },
 
   initVibrateSelect: function aev_initVibrateSelect() {

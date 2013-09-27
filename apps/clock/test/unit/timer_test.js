@@ -5,6 +5,7 @@ requireApp('clock/js/form_button.js');
 requireApp('clock/test/unit/mocks/mock_asyncstorage.js');
 requireApp('clock/js/timer.js');
 requireApp('clock/js/timer_panel.js');
+requireApp('clock/js/alarm_player.js');
 
 suite('Timer', function() {
   var as, al, now, startAt, endAt, duration;
@@ -243,6 +244,8 @@ suite('Timer', function() {
       this.sinon.spy(navigator, 'vibrate');
       this.sinon.stub(window, 'Audio', function() {
         this.play = sandbox.spy();
+        this.pause = sandbox.spy();
+        this.addEventListener = sandbox.spy();
         return this;
       });
     });

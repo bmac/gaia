@@ -88,7 +88,7 @@ Timer.Panel = function(element) {
         _(sound.replace('.', '_'));
     }
   };
-  this.soundButton = new FormButton(sound, soundMenuConfig);
+  this.soundButton = new AlarmPreview(sound, soundMenuConfig);
   this.soundButton.refresh();
 
   View.instance(element).on(

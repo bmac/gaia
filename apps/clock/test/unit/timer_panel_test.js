@@ -8,6 +8,8 @@ requireApp('clock/js/utils.js');
 requireApp('clock/test/unit/mocks/mock_picker.js');
 requireApp('clock/js/timer.js');
 requireApp('clock/js/timer_panel.js');
+requireApp('clock/js/form_button.js');
+requireApp('clock/js/alarm_player.js');
 
 suite('Timer.Panel', function() {
   var p;
