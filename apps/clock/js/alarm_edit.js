@@ -97,8 +97,6 @@ var AlarmEdit = {
                                _(sound.replace('.', '_'));
       }
     });
-    this.soundSelect.addEventListener('change', this);
-    this.soundSelect.addEventListener('blur', this);
     this.vibrateButton = new FormButton(this.vibrateSelect, {
       formatLabel: function(vibrate) {
         return (vibrate === null || vibrate === '0') ?
@@ -115,7 +113,6 @@ var AlarmEdit = {
 
     this.deleteButton.addEventListener('click', this);
 
-    this.alarmPlayer = new AlarmPlayer();
     this.init = function() {};
   },
 
@@ -137,16 +134,6 @@ var AlarmEdit = {
           }
           AlarmList.refreshItem(alarm);
         });
-        break;
-      case this.soundSelect:
-        switch (evt.type) {
-          case 'change':
-            this.previewSound();
-            break;
-          case 'blur':
-            this.stopPreviewSound();
-            break;
-        }
         break;
       case this.deleteButton:
         ClockView.show();
@@ -211,14 +198,6 @@ var AlarmEdit = {
 
   getSoundSelect: function aev_getSoundSelect() {
     return this.soundButton.getValue();
-  },
-
-  previewSound: function aev_previewSound() {
-    this.alarmPlayer.playLoop(this.getSoundSelect());
-  },
-
-  stopPreviewSound: function aev_stopPreviewSound() {
-    this.alarmPlayer.pause();
   },
 
   initVibrateSelect: function aev_initVibrateSelect() {

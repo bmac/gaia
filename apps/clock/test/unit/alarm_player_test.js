@@ -1,7 +1,7 @@
 requireApp('clock/js/emitter.js');
 requireApp('clock/js/alarm_player.js');
 
-suite('AlarmPreviewPlayer Test', function() {
+suite('AlarmPlayer Test', function() {
   var mockAudio, alarmPlayer;
 
   setup(function() {

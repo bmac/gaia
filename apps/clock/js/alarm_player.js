@@ -63,14 +63,6 @@ AlarmPlayer.prototype.pause = function() {
   this.audio.pause();
 };
 
-/**
- * onInterrupt called when the mozinterruptbegin event is triggered
- *
- * @param {Event} event object
- */
-AlarmPlayer.prototype.onInterrupt = function(event) {};
-
-
 exports.AlarmPlayer = AlarmPlayer;
 
 }(this));
