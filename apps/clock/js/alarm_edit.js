@@ -214,7 +214,7 @@ var AlarmEdit = {
   },
 
   previewSound: function aev_previewSound() {
-    this.alarmPlayer.previewSound(this.getSoundSelect());
+    this.alarmPlayer.playLoop(this.getSoundSelect());
   },
 
   stopPreviewSound: function aev_stopPreviewSound() {

@@ -99,15 +99,10 @@ var RingView = {
   },
 
   ring: function rv_ring() {
-    var ringtonePlayer = this.ringtonePlayer = new AlarmPlayer();
-    ringtonePlayer.addEventListener('mozinterruptbegin', this);
-    ringtonePlayer.onInterrupt = (function() {
-        // If the incoming call happens after the alarm rings,
-        // we need to close ourselves.
-        this.stopAlarmNotification();
-        window.close();
-      }).bind(this);
-    AlarmPlayer.previewSound(this.getAlarmSound());
+    var player = this.player = new AlarmPlayer();
+    player.on('interrupt', this.oninterrupt.bind(this));
+
+    player.playLoop(this.getAlarmSound());
     /* If user don't handle the onFire alarm,
        pause the ringtone after 15 minutes */
     var self = this;
@@ -150,8 +145,8 @@ var RingView = {
   stopAlarmNotification: function rv_stopAlarmNotification(action) {
     switch (action) {
     case 'ring':
-      if (this.ringtonePlayer) {
-        this.ringtonePlayer.pause();
+      if (this.player) {
+        this.player.pause();
       }
       break;
     case 'vibrate':
@@ -160,8 +155,8 @@ var RingView = {
       }
       break;
     default:
-      if (this.ringtonePlayer) {
-        this.ringtonePlayer.pause();
+      if (this.player) {
+        this.player.pause();
       }
       if (this.vibrateInterval) {
         window.clearInterval(this.vibrateInterval);
@@ -184,6 +179,13 @@ var RingView = {
 
   getAlarmSound: function am_getAlarmSound() {
     return this.firedAlarm.sound;
+  },
+
+  oninterrupt: function() {
+    // If the incoming call happens after the alarm rings,
+    // we need to close ourselves.
+    this.stopAlarmNotification();
+    window.close();
   },
 
   handleEvent: function rv_handleEvent(evt) {
@@ -218,4 +220,3 @@ var RingView = {
 };
 
 RingView.init();
-

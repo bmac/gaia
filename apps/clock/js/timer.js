@@ -139,7 +139,7 @@ Timer.prototype.cancel = function timerCancel() {
 Timer.prototype.notify = function timerNotify() {
   if (this.sound) {
     var alarmPlayer = new AlarmPlayer();
-    alarmPlayer.playSound(this.sound);
+    alarmPlayer.play(this.sound);
   }
 
   if (this.vibrate && navigator.vibrate) {

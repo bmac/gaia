@@ -1,3 +1,4 @@
+requireApp('clock/js/emitter.js');
 requireApp('clock/js/alarm_player.js');
 
 suite('AlarmPreviewPlayer Test', function() {
@@ -18,7 +19,7 @@ suite('AlarmPreviewPlayer Test', function() {
   });
 
   test('it should play the alarm sound', function() {
-    alarmPlayer.playSound('foo.opus');
+    alarmPlayer.play('foo.opus');
     assert.isTrue(mockAudio.play.called);
     assert.include(mockAudio.src, 'shared/resources/media/alarms/foo.opus');
     assert.equal(mockAudio.mozAudioChannelType, 'alarm');
@@ -26,7 +27,7 @@ suite('AlarmPreviewPlayer Test', function() {
   });
 
   test('it should preview the alarm sound', function() {
-    alarmPlayer.previewSound('foo.opus');
+    alarmPlayer.playLoop('foo.opus');
     assert.isTrue(mockAudio.play.called);
     assert.include(mockAudio.src, 'shared/resources/media/alarms/foo.opus');
     assert.equal(mockAudio.mozAudioChannelType, 'alarm');
@@ -43,9 +44,10 @@ suite('AlarmPreviewPlayer Test', function() {
     assert.isTrue(mockAudio.pause.called);
   });
 
-  test('the mozinterruptbegin event should call onInterrupt', function() {
-    this.sinon.stub(alarmPlayer, 'onInterrupt');
+  test('the mozinterruptbegin should trigger an interrup event', function() {
+    var handler = this.sinon.spy();
+    alarmPlayer.on('interrupt', handler);
     mockAudio.dispatchEvent(new Event('mozinterruptbegin'));
-    assert.isTrue(alarmPlayer.onInterrupt.called);
+    assert.isTrue(handler.calledOnce);
   });
 });

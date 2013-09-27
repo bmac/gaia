@@ -1,13 +1,12 @@
 (function(exports) {
 'use strict';
 
-var _playSound = function(audioElement, alarmName, loop) {
-  audioElement.pause();
-  audioElement.loop = loop;
-  var previewRingtone = 'shared/resources/media/alarms/' + alarmName;
+function playAlarm(audio, alarmName, loop) {
+  audio.pause();
+  audio.loop = loop;
 
-  audioElement.src = previewRingtone;
-  audioElement.play();
+  audio.src = 'shared/resources/media/alarms/' + alarmName;
+  audio.play();
 };
 
 /**
@@ -18,40 +17,42 @@ var _playSound = function(audioElement, alarmName, loop) {
  * @return {AlarmPlayer} AlarmPlayer object.
  *
  */
-var AlarmPlayer = function() {
-  this._audioElement = new Audio();
-  this._audioElement.mozAudioChannelType = 'alarm';
+function AlarmPlayer() {
+  this.audio = new Audio();
+  this.audio.mozAudioChannelType = 'alarm';
   var pause = this.pause.bind(this);
   var mozInterruptHandler = (function() {
     this.pause();
-    this.onInterrupt.apply(this, arguments);
+    this.emit('interrupt');
   }).bind(this);
 
   // Only ringer/telephony channel audio could trigger 'mozinterruptbegin'
   // event on the 'alarm' channel audio element.
-  this._audioElement.addEventListener('mozinterruptbegin', mozInterruptHandler);
+  this.audio.addEventListener('mozinterruptbegin', mozInterruptHandler);
 };
 
+Emitter.mixin(AlarmPlayer.prototype);
+
 /**
- * previewSound given an alarm name this will play the alarm's audio
+ * playLoop given an alarm name this will play the alarm's audio
  * file on a loop.
  *
  * @param {String} alarmName the file name of the alarm
  *
  */
-AlarmPlayer.prototype.previewSound = function(alarmName) {
-  _playSound(this._audioElement, alarmName, true);
+AlarmPlayer.prototype.playLoop = function(alarmName) {
+  playAlarm(this.audio, alarmName, true);
 };
 
 /**
- * playSound given an alarm name this will play the alarm's audio
+ * play given an alarm name this will play the alarm's audio
  * file once.
  *
  * @param {String} alarmName the file name of the alarm
  *
  */
-AlarmPlayer.prototype.playSound = function(alarmName) {
-  _playSound(this._audioElement, alarmName, false);
+AlarmPlayer.prototype.play = function(alarmName) {
+  playAlarm(this.audio, alarmName, false);
 };
 
 /**
@@ -59,7 +60,7 @@ AlarmPlayer.prototype.playSound = function(alarmName) {
  *
  */
 AlarmPlayer.prototype.pause = function() {
-  this._audioElement.pause();
+  this.audio.pause();
 };
 
 /**
